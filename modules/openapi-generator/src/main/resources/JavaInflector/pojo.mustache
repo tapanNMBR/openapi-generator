@@ -16,7 +16,7 @@ public class {{classname}} {{#parent}}extends {{{.}}}{{/parent}} {{#vendorExtens
   @JsonProperty("{{baseName}}")
   {{/jackson}}
   {{#gson}}
-  @SerializedName("{{baseName}}")
+  @JsonProperty("{{baseName}}")
   {{/gson}}
   {{#isContainer}}
   private {{{datatypeWithEnum}}} {{name}}{{#required}} = {{{defaultValue}}}{{/required}}{{^required}} = null{{/required}};

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.Parameter.StyleEnum;
 import io.swagger.v3.parser.OpenAPIV3Parser;
+
 {{/dynamicOperations}}
 import okhttp3.*;
 import okhttp3.internal.http.HttpMethod;
@@ -55,6 +56,11 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import {{invokerPackage}}.auth.Authentication;
 import {{invokerPackage}}.auth.HttpBasicAuth;
@@ -1045,7 +1051,16 @@ public class ApiClient {
             contentType = "application/json";
         }
         if (isJsonMime(contentType)) {
-            return json.deserialize(respBody, returnType);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            JavaType javaType = mapper.constructType(returnType);
+            try {
+                return mapper.readValue(respBody, javaType);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return (T) respBody;
+            }
         } else if (returnType.equals(String.class)) {
             // Expecting string, return the raw response body.
             return (T) respBody;

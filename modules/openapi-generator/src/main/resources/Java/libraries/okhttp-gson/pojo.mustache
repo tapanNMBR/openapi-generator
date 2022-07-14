@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -82,7 +83,7 @@ public class {{classname}} {{#parent}}extends {{{.}}} {{/parent}}{{#vendorExtens
   {{/isXmlAttribute}}
   {{/withXml}}
   {{#gson}}
-  @SerializedName(SERIALIZED_NAME_{{nameInSnakeCase}})
+  @JsonProperty(SERIALIZED_NAME_{{nameInSnakeCase}})
   {{/gson}}
   {{#vendorExtensions.x-field-extra-annotation}}
   {{{vendorExtensions.x-field-extra-annotation}}}
