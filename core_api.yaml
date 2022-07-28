@@ -1,5 +1,5 @@
 generatorName: java
-outputDir: /home/tapan/repos/openApiGen2
+outputDir: /home/tapan/repos/openApiGen
 inputSpec: http://localhost:8080/leads-service/api/v1/docs
 additionalProperties:
   serializationLibrary: jackson

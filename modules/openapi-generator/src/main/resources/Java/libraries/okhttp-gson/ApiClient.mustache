@@ -1094,7 +1094,14 @@ public class ApiClient {
         } else if (isJsonMime(contentType)) {
             String content;
             if (obj != null) {
-                content = json.serialize(obj);
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                    try {
+                        content = mapper.writeValueAsString(obj);
+                    } catch (JsonProcessingException e) {
+                        throw new ApiException(e.getMessage());
+                    }
             } else {
                 content = null;
             }
